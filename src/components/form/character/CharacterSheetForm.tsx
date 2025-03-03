@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, {useState, ChangeEvent, useEffect} from "react";
 import {
   Box,
   Input,
@@ -15,13 +15,14 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid"; // 🔹 Per generare un ID univoco se necessario
+import { v4 as uuidv4 } from "uuid";
+import {useCreatePendingCharacterMutation} from "../../../services/character";
 
 interface CharacterSkills {
   [key: string]: { proficiency: boolean; expertise: boolean };
 }
 
-interface CharacterState {
+interface CharacterSheet {
   id: string;
   name: string;
   class: string;
@@ -43,77 +44,71 @@ interface CharacterState {
   skills: CharacterSkills;
 }
 
-const CharacterSheetPage: React.FC = () => {
+const newCharacter: CharacterSheet = {
+  id: uuidv4(),
+  name: "",
+  class: "",
+  level: 1,
+  background: "",
+  race: "",
+  age: 0,
+  features: "",
+  equipment: "",
+  tools_languages: "",
+  backstory: "",
+  spells: "",
+  strength: 10,
+  dexterity: 10,
+  constitution: 10,
+  intelligence: 10,
+  wisdom: 10,
+  charisma: 10,
+  skills: {
+    "Acrobatics (Dex)": { proficiency: false, expertise: false },
+    "Animal Handling (Wis)": { proficiency: false, expertise: false },
+    "Arcana (Int)": { proficiency: false, expertise: false },
+    "Athletics (Str)": { proficiency: false, expertise: false },
+    "Deception (Cha)": { proficiency: false, expertise: false },
+    "History (Int)": { proficiency: false, expertise: false },
+    "Insight (Wis)": { proficiency: false, expertise: false },
+    "Intimidation (Cha)": { proficiency: false, expertise: false },
+    "Investigation (Int)": { proficiency: false, expertise: false },
+    "Medicine (Wis)": { proficiency: false, expertise: false },
+    "Nature (Int)": { proficiency: false, expertise: false },
+    "Perception (Wis)": { proficiency: false, expertise: false },
+    "Performance (Cha)": { proficiency: false, expertise: false },
+    "Persuasion (Cha)": { proficiency: false, expertise: false },
+    "Religion (Int)": { proficiency: false, expertise: false },
+    "Sleight of Hand (Dex)": { proficiency: false, expertise: false },
+    "Stealth (Dex)": { proficiency: false, expertise: false },
+    "Survival (Wis)": { proficiency: false, expertise: false },
+  },
+};
+
+const CharacterSheetForm = ({ sheet }: { sheet?: CharacterSheet }) => {
   const [searchParams] = useSearchParams();
-  const characterId = searchParams.get("id");
   const isEditableFromURL = searchParams.get("edit") === "true";
   const navigate = useNavigate();
 
-  const [isEditing, setIsEditing] = useState(isEditableFromURL);
-  const [character, setCharacter] = useState<CharacterState | null>(null);
+  const [createPendingCharacter, {error: creationError, isSuccess: creationIsSuccess, isLoading: creationIsLoading}] = useCreatePendingCharacterMutation()
 
   useEffect(() => {
-    const storedCharacters = JSON.parse(localStorage.getItem("pendingCharacters") || "[]");
-
-    if (characterId) {
-      // 🔹 Se c'è un ID, cerca il personaggio esistente
-      const foundCharacter = storedCharacters.find((char: CharacterState) => char.id === characterId);
-      if (foundCharacter) {
-        setCharacter(foundCharacter);
-      }
-    } else {
-      // 🔹 Se non c'è un ID, crea un nuovo personaggio con dati vuoti
-      const newCharacter: CharacterState = {
-        id: uuidv4(),
-        name: "",
-        class: "",
-        level: 1,
-        background: "",
-        race: "",
-        age: 0,
-        features: "",
-        equipment: "",
-        tools_languages: "",
-        backstory: "",
-        spells: "",
-        strength: 10,
-        dexterity: 10,
-        constitution: 10,
-        intelligence: 10,
-        wisdom: 10,
-        charisma: 10,
-        skills: {
-          "Acrobatics (Dex)": { proficiency: false, expertise: false },
-          "Animal Handling (Wis)": { proficiency: false, expertise: false },
-          "Arcana (Int)": { proficiency: false, expertise: false },
-          "Athletics (Str)": { proficiency: false, expertise: false },
-          "Deception (Cha)": { proficiency: false, expertise: false },
-          "History (Int)": { proficiency: false, expertise: false },
-          "Insight (Wis)": { proficiency: false, expertise: false },
-          "Intimidation (Cha)": { proficiency: false, expertise: false },
-          "Investigation (Int)": { proficiency: false, expertise: false },
-          "Medicine (Wis)": { proficiency: false, expertise: false },
-          "Nature (Int)": { proficiency: false, expertise: false },
-          "Perception (Wis)": { proficiency: false, expertise: false },
-          "Performance (Cha)": { proficiency: false, expertise: false },
-          "Persuasion (Cha)": { proficiency: false, expertise: false },
-          "Religion (Int)": { proficiency: false, expertise: false },
-          "Sleight of Hand (Dex)": { proficiency: false, expertise: false },
-          "Stealth (Dex)": { proficiency: false, expertise: false },
-          "Survival (Wis)": { proficiency: false, expertise: false },
-        },
-      };
-
-      setCharacter(newCharacter);
+    if (creationError != null) {
+      // TODO handle error
+    } else if (creationIsSuccess) {
+      // TODO alert navigate
     }
-  }, [characterId]);
+  }, [creationError, creationIsSuccess]);
+
+  const [isEditing, setIsEditing] = useState(isEditableFromURL);
+  const [character, setCharacter] = useState<CharacterSheet>(sheet ?? newCharacter)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (character) {
       setCharacter((prev) => prev ? { 
         ...prev, 
-        [name]: typeof prev[name as keyof CharacterState] === "number" ? Number(value) : value 
+        [name]: typeof prev[name as keyof CharacterSheet] === "number" ? Number(value) : value
       } : prev);
     }
   };
@@ -134,21 +129,10 @@ const CharacterSheetPage: React.FC = () => {
   };
 
   const handleSave = () => {
-    if (!character) return;
-    
-    const storedCharacters = JSON.parse(localStorage.getItem("pendingCharacters") || "[]");
-
-    // 🔹 Se il personaggio esiste già, aggiorna, altrimenti aggiungi
-    const updatedCharacters = storedCharacters.some((char: CharacterState) => char.id === character.id)
-      ? storedCharacters.map((char: CharacterState) => (char.id === character.id ? character : char))
-      : [...storedCharacters, character];
-
-    localStorage.setItem("pendingCharacters", JSON.stringify(updatedCharacters));
-
-    navigate("/characters");
+      createPendingCharacter(character)
   };
 
-  if (!character) return <Heading>Caricamento...</Heading>;
+  if (character === null) return <Heading>Caricamento...</Heading>;
 
   return (
     <Box bg="gray.100" p={6} maxW="1800px" mx="auto" borderRadius="md">
@@ -248,8 +232,9 @@ const CharacterSheetPage: React.FC = () => {
           <Textarea name="spells" value={character.spells} onChange={handleChange} height="250px" />
         </FormControl>
       </Grid>
+
+      <Button isLoading={creationIsLoading}>Create</Button>
+
     </Box>
   );
 };
-
-export default CharacterSheetPage;

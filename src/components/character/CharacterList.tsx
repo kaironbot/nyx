@@ -1,15 +1,7 @@
 import {Container, Heading, SimpleGrid, Skeleton, useBreakpointValue, VStack} from "@chakra-ui/react";
 import { CharacterCard } from "./CharacterCard";
 import { Character } from "../../models/character/Character";
-import {Size} from "../form/controls/LabelInput";
-
-const cardsForSize: Record<Size, { cards: number }> = {
-	xl: { cards: 4 },
-	lg: { cards: 3 },
-	md: { cards: 2 },
-	sm: { cards: 1 },
-	base: { cards: 1 },
-}
+import {cardsForSize} from "../../utils/character-utils";
 
 export const CharacterList = ({
 	activeCharacters,
@@ -18,9 +10,7 @@ export const CharacterList = ({
 	activeCharacters: Character<string>[] | undefined;
 	otherCharacters: Character<string>[] | undefined;
 }) => {
-	const size = useBreakpointValue<{ cards: number }>(cardsForSize, {
-		fallback: 'md',
-	})
+	const size = useBreakpointValue<{ cards: number }>(cardsForSize, {fallback: 'md'})
 	return (
 		<VStack spacing="2rem">
 			{(activeCharacters == null || otherCharacters == null) && [1, 2, 3, 4, 5].map((it) => (
