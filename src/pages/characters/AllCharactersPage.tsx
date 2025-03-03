@@ -9,7 +9,7 @@ import {
 	InputLeftAddon,
 	InputRightElement,
 	Spinner,
-	Text
+	Text,
 } from "@chakra-ui/react";
 import {CharacterRow} from "../../components/character/CharacterRow";
 import React, {useCallback, useEffect, useState} from "react";

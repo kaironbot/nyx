@@ -101,6 +101,55 @@ export const characterApi = createApi({
 			},
 			invalidatesTags: (_response, _error, payload) => [{ type: TokenTagType, id: payload.characterId }]
 		}),
+		// 🔹 Recupera tutti i pending characters
+		getPendingCharacters: build.query<Character<any>[], void>({
+			query: () => "pending",
+			providesTags: [AllCharactersTag],
+		}),
+
+		// 🔹 Crea un nuovo pending character
+		createPendingCharacter: build.mutation<Character<any>, Partial<Character<any>>>({
+			query: (newCharacter) => ({
+				url: "pending",
+				method: "POST",
+				body: JSON.stringify(newCharacter),
+				headers: {
+					"Content-type": "application/json",
+					"Access-Control-Allow-Origin": "*",
+				},
+			}),
+			invalidatesTags: [AllCharactersTag],
+		}),
+
+		// 🔹 Recupera un pending character per ID
+		getPendingCharacterById: build.query<Character<any>, string>({
+			query: (characterId) => `pending/${characterId}`,
+			providesTags: (character) =>
+				character ? [{ type: CharactersTagType, id: character.id }, AllCharactersTag] : [AllCharactersTag],
+		}),
+
+		// 🔹 Aggiorna un pending character
+		updatePendingCharacter: build.mutation<Character<any>, { id: string; data: Partial<Character<any>> }>({
+			query: ({ id, data }) => ({
+				url: `pending/${id}`,
+				method: "PATCH",
+				body: JSON.stringify(data),
+				headers: {
+					"Content-type": "application/json",
+					"Access-Control-Allow-Origin": "*",
+				},
+			}),
+			invalidatesTags: (result, error, { id }) => [{ type: CharactersTagType, id }],
+		}),
+
+		// 🔹 Elimina un pending character
+		deletePendingCharacter: build.mutation<void, string>({
+			query: (id) => ({
+				url: `pending/${id}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: [AllCharactersTag],
+		}),
 	}),
 });
 
@@ -113,5 +162,11 @@ export const {
 	useGetCharacterTokenQuery,
 	useGetCurrentActiveCharactersQuery,
 	useUpdateCharacterTokenMutation,
-	useUpdateInventoryMutation
+	useUpdateInventoryMutation,
+	// 🔹 Nuove API per Pending Characters
+	useGetPendingCharactersQuery,
+	useCreatePendingCharacterMutation,
+	useGetPendingCharacterByIdQuery,
+	useUpdatePendingCharacterMutation,
+	useDeletePendingCharacterMutation,
 } = characterApi;

@@ -10,7 +10,7 @@ import {expToLevel} from "../../models/utils/ExpTable";
 
 interface CharacterCardProps {
 	character: Character<string>
-	linkToProfile: boolean
+	linkToProfile: string; //l'ho modificato ma non so se è corretto
 }
 
 export const CharacterCard = ({ character, linkToProfile }: CharacterCardProps) => {

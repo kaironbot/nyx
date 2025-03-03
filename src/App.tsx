@@ -15,11 +15,13 @@ import {ItemUsagePage} from "./pages/items/ItemUsagePage";
 import {SessionsStatsPage} from "./pages/sessions/SessionsStatsPage";
 import {AllCharactersPage} from "./pages/characters/AllCharactersPage";
 import {AllPlayersPage} from "./pages/players/AllPlayersPage";
+import CharacterSheetPage from "./pages/CharacterSheetPage";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
 		children: [
+		
 			{ index: true, element: <HomePage /> },
 			{ path: "auth", element: <AuthPage /> },
 			{
@@ -27,7 +29,8 @@ const router = createBrowserRouter([
 				element: <AuthenticatedLayout />,
 				children : [
 					{ index: true, element: <CharactersPage /> },
-					{ path: ":characterId", element: <CharacterPage />}
+					{ path: ":characterId", element: <CharacterPage />},
+					{ path: ":characterCreation", element: <CharacterSheetPage />}
 				]
 			},
 			{
@@ -46,6 +49,7 @@ const router = createBrowserRouter([
 					{ path: "update", element: <AddErrataPage /> },
 					{ path: "giveRandomItem", element: <GiveRandomItemPage /> },
 					{ path: "all", element: <AllCharactersPage /> },
+					{ path: "sheet", element: <CharacterSheetPage /> }
 				]
 			},
 			{
