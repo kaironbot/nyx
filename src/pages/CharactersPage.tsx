@@ -16,7 +16,7 @@ export const CharactersPage = () => {
 	return (
 		<Center>
 			{/* 🔹 Pulsante per creare un nuovo personaggio */}
-			<Button colorScheme="blue" alignSelf="flex-end" mb={4} onClick={/* Open modal */}>
+			<Button colorScheme="blue" alignSelf="flex-end" mb={4} onClick={() => {}/* Open modal */}>
 				Crea Nuovo Personaggio
 			</Button>
 

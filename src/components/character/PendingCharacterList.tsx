@@ -20,6 +20,7 @@ export const PendingCharacterList = () => {
                     </Container>
                     <SimpleGrid columns={size?.cards ?? 3} spacing={2}>
 						{pendingCharacters.map((it) => (
+							<></>
 								// TODO Un'altra card che cliccando apre un modal col form
 							))}
                     </SimpleGrid>

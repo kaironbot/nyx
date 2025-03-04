@@ -178,7 +178,7 @@ const CharacterSheetForm = ({ sheet }: { sheet?: CharacterSheet }) => {
             {["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"].map((attr) => (
               <FormControl key={attr}>
                 <FormLabel textTransform="capitalize">{attr}</FormLabel>
-                <Input name={attr} value={character[attr as keyof CharacterState] as number} onChange={handleChange} type="number" />
+                <Input name={attr} value={character[attr as keyof CharacterSheet] as number} onChange={handleChange} type="number" />
               </FormControl>
             ))}
           </VStack>
