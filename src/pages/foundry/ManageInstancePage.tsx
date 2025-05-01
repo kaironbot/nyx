@@ -45,7 +45,7 @@ export const ManageInstancePage = () => {
 							as="b"
 							fontSize="xl"
 							mr="0.5em"
-						>Uptime</Text>
+						>Last Activation</Text>
 					</Flex>
 				</GridItem>
 				<GridItem>
@@ -96,6 +96,7 @@ export const ManageInstancePage = () => {
 				{data != null && data["deposito-pg"] != null && <FoundryRow instanceInfo={data["deposito-pg"]} />}
 				{data != null && Object.values(data)
 					.filter(it => it.id !== "deposito-pg")
+					.sort((a, b) => a.id.localeCompare(b.id))
 					.map(it => <FoundryRow key={it.id} instanceInfo={it} />)
 				}
 			</Grid>
