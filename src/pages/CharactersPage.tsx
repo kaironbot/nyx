@@ -1,4 +1,4 @@
-import {Alert, AlertIcon, Center, AlertTitle, AlertDescription, useBreakpointValue} from "@chakra-ui/react";
+import {Alert, AlertIcon, Center, AlertTitle, AlertDescription} from "@chakra-ui/react";
 import {useGetAllCharactersForSelfQuery} from "../services/character";
 import { CharacterList } from "../components/character/CharacterList";
 

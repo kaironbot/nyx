@@ -47,8 +47,8 @@ export const CharacterList = ({
 						<Heading>Character history</Heading>
 					</Container>
 					<SimpleGrid columns={size?.cards ?? 3} spacing={2}>
-						{!!activeCharacters &&
-							activeCharacters.map((it) => (
+						{!!otherCharacters &&
+							otherCharacters.map((it) => (
 								<CharacterCard key={it.id} character={it} linkToProfile={false}/>
 							))}
 					</SimpleGrid>

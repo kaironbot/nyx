@@ -7,6 +7,8 @@ import React from "react";
 import { CharacterButton } from "./buttons/CharacterButton";
 import { ItemButton } from "./buttons/ItemButton";
 import {PlayerButton} from "./buttons/PlayerButton";
+import {hasRole} from "../../utils/role-utils";
+import {FoundryButton} from "./buttons/FoundryButton";
 
 export const TopMenu = ({ roles }: { roles: Role[] }) => {
 	const { colorMode } = useColorMode()
@@ -28,6 +30,7 @@ export const TopMenu = ({ roles }: { roles: Role[] }) => {
 			<CharacterButton roles={roles} backgroundColor={backgroundColor} />
 			<PlayerButton roles={roles} backgroundColor={backgroundColor}/>
 			<ItemButton roles={roles} backgroundColor={backgroundColor}/>
+			{hasRole(roles, Role.MANAGE_SESSIONS) && <FoundryButton backgroundColor={backgroundColor}/>}
 			<Box position="absolute" right="2vw" paddingTop="0.25em">
 				<AvatarIcon user={member} />
 			</Box>

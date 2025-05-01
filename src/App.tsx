@@ -15,6 +15,8 @@ import {ItemUsagePage} from "./pages/items/ItemUsagePage";
 import {SessionsStatsPage} from "./pages/sessions/SessionsStatsPage";
 import {AllCharactersPage} from "./pages/characters/AllCharactersPage";
 import {AllPlayersPage} from "./pages/players/AllPlayersPage";
+import {RedirectPage} from "./pages/RedirectPage";
+import {ManageInstancePage} from "./pages/foundry/ManageInstancePage";
 
 const router = createBrowserRouter([
 	{
@@ -22,12 +24,13 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <HomePage /> },
 			{ path: "auth", element: <AuthPage /> },
+			{ path: "inactive/:instanceUrl/:other?", element: <RedirectPage /> },
 			{
 				path: "user",
 				element: <AuthenticatedLayout />,
 				children : [
 					{ index: true, element: <CharactersPage /> },
-					{ path: ":characterId", element: <CharacterPage />}
+					{ path: ":characterId", element: <CharacterPage />},
 				]
 			},
 			{
@@ -62,6 +65,13 @@ const router = createBrowserRouter([
 					{ path: "list", element: <AllItemsPage /> },
 					{ path: "add", element: <AddItemPage /> },
 					{ path: "usage", element: <ItemUsagePage /> }
+				]
+			},
+			{
+				path: "foundry",
+				element: <AuthenticatedLayout />,
+				children: [
+					{ path: "instances", element: <ManageInstancePage /> },
 				]
 			}
 		],

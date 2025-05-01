@@ -20,7 +20,8 @@ export enum Role {
     PLAYER,
     MANAGE_CHARACTERS,
     MANAGE_ITEMS,
-    DELETE_ITEMS
+    DELETE_ITEMS,
+    MANAGE_FOUNDRY
 }
 
 const reverseEnum: { [key: string]: Role} = {
@@ -29,7 +30,8 @@ const reverseEnum: { [key: string]: Role} = {
     "p": Role.PLAYER,
     "mC": Role.MANAGE_CHARACTERS,
     "mI": Role.MANAGE_ITEMS,
-    "dI": Role.DELETE_ITEMS
+    "dI": Role.DELETE_ITEMS,
+    "mF": Role.MANAGE_FOUNDRY
 }
 
 export function getRolesFromJwt(jwt: string | null): Role[] {
@@ -40,9 +42,6 @@ export function getRolesFromJwt(jwt: string | null): Role[] {
     }
     try {
         const rawRoles = JSON.parse(JSON.parse(a2b(parts[1]))["r"]) as string[];
-        if(!rawRoles) {
-            throw Error("Invalid JWT format");
-        }
         return rawRoles.map( it => {
             const role = reverseEnum[it]
             if(!!role) {
